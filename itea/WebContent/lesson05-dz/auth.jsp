@@ -65,9 +65,9 @@
 	</div>
 
 </form>
-
-</body>
-</html>
 <%
 	}
 %>
+
+</body>
+</html>
