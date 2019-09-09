@@ -14,7 +14,7 @@ public class Person implements Serializable {
 	private String comment;
 	private String amigo;
 	private boolean error;
-	List<String> errorText;
+	private List<String> errorText;
 
 	public Person() {
 	}
