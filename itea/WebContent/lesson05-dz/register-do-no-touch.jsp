@@ -1,5 +1,4 @@
-<%@ page import="ua.itea.Validation"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="includes/header.jsp"%>
 
 <c:if test="${param['login'] != null}">
