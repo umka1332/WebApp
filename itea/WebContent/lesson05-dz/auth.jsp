@@ -1,52 +1,52 @@
 <!--Author: Oleksandr Naumov-->
 <%@include file="includes/header.jsp" %>
-<%@page import="java.util.Date"%>
-<%@page import="ua.itea.Auth"%>
-<%!int tryCounter = 1;%>
-<%!long failTime = 0;%>
-<%!long now() {
-		return new Date().getTime();
-	}%>
-<%
-	String login = request.getParameter("login");
-	String password = request.getParameter("password");
-	//By default we enter page for the first time with no parameters in request
-	boolean showMessage = false;
-	boolean showForm = true;
-	String message = "<h1 style='color:red;'>ACCESS DENIED</h1>";
-	if (failTime > now()) {
-		showMessage = true;
-		showForm = false;
-	} else {
-		failTime = 0;
-		if (login != null && password != null) {
-			showMessage = true;
-			//When tryCounter == 3 we should check credentials, but don't show form
-			if (tryCounter <= 3 && new Auth().getLogin(login, password)) {
-				message = "<h1 style='color:green;'>ACCESS GRANTED</h1>";
-				tryCounter = 1;
-				showForm = false;
-			} else {
-				if (tryCounter == 3) {
-					failTime = now() + 60000;
-					tryCounter = 1;
-					showForm = false;
-				} else {
-					tryCounter++;
-				}
-			}
-		}
-	}
-	//------------------------------------------------------------------------------
-	if (showMessage)
-		out.write(message);
-	if (showForm)
-		out.write("<br/> Try# " + tryCounter);
-	if (failTime > 0)
-		out.write("<br/> Time Left:  00:" + (failTime - now()) / 1000);
-	if (showForm) {
-%>
-<form id="loginForm" action="auth.jsp" method="post">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<jsp:useBean id="counter" class="ua.itea.TryCounter" scope="session" />
+<jsp:setProperty property="showMessage" name="counter" value='false' />
+<jsp:setProperty property="showForm" name="counter" value='true' />
+<jsp:setProperty property="message" name="counter" value="<h1 style='color:red;'>ACCESS DENIED</h1>" />
+<jsp:useBean id="date" class="java.util.Date" />
+<jsp:useBean id="auth" class="ua.itea.AuthBean" />
+<jsp:setProperty property="*" name="auth" />
+<c:choose>
+<c:when test="${counter.failTime > date.time }">
+	<jsp:setProperty property="showMessage" name="counter" value='true' />
+	<jsp:setProperty property="showForm" name="counter" value='false' />
+</c:when>
+<c:otherwise>
+	<jsp:setProperty property="failTime" name="counter" value='0' />
+	<c:if test="${param.login != null and param.password != null }">
+		<jsp:setProperty property="showMessage" name="counter" value='true' />
+		<c:choose>
+			<c:when test="${counter.tryCounter <=3 and auth.accessGranted }">
+				<jsp:setProperty property="message" name="counter" value="<h1 style='color:green;'>ACCESS GRANTED</h1>" />
+				<jsp:setProperty property="tryCounter" name="counter" value='1' />
+				<jsp:setProperty property="showForm" name="counter" value='false' />
+			</c:when>
+			<c:when test="${counter.tryCounter == 3 }">
+				<jsp:setProperty property="failTime" name="counter" value='${ date.time + 60000 }' />
+				<jsp:setProperty property="tryCounter" name="counter" value='1' />
+				<jsp:setProperty property="showForm" name="counter" value='false' />
+			</c:when>
+			<c:otherwise>
+				<jsp:setProperty property="tryCounter" name="counter" value='${ counter.tryCounter + 1 }' />
+			</c:otherwise>
+		</c:choose>	
+	</c:if>
+</c:otherwise>
+</c:choose>
+<c:if test="${counter.showMessage }">
+	${counter.message }
+</c:if>
+<c:if test="${ counter.showForm }">
+	<br />Try #<c:out value="${counter.tryCounter }"></c:out>
+</c:if>
+<c:if test="${ counter.failTime > 0 }">
+	<br /> Time Left:  00:<c:out value="${ (counter.failTime - date.time) div 1000 }"></c:out>
+</c:if>
+<c:if test="${counter.showForm }" >
+	<form id="loginForm" method="get">
 
 	<div class="field">
 		<label>Enter your login:</label>
@@ -65,9 +65,6 @@
 	</div>
 
 </form>
-<%
-	}
-%>
-
+</c:if>
 </body>
 </html>

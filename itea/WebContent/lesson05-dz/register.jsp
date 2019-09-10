@@ -1,175 +1,96 @@
-<%@ page import="ua.itea.Validation"%>
-<%!String safe(String s) {
-		return s != null ? s : "";
-	}
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="includes/header.jsp"%>
 
-	String check(String val, String match, String res) {
-		return (val != null && val.equals(match)) ? res : "";
-	}%>
+<c:if test="${param['login'] != null}">
+	<jsp:useBean id="person" class="ua.itea.Person" />
+	<jsp:setProperty property="*" name="person" />
+</c:if>
 
-<%@include file="includes/header.jsp"%>
-<%
-	boolean error = false;
-	StringBuilder errorText = new StringBuilder();
-	Validation validator = new Validation();
-
-	String login = request.getParameter("login");
-	String password = request.getParameter("password");
-	String rePassword = request.getParameter("re-password");
-	String name = request.getParameter("name");
-	String region = request.getParameter("region");
-	String gender = request.getParameter("gender");
-	String comment = request.getParameter("comment");
-	String amigo = request.getParameter("amigo");
-
-	if (login != null) {
-		errorText.append("<il style='color:red'>");
-		if (login.isEmpty()) {
-			error = true;
-			errorText.append("<ul>Empty login</ul>");
-		}
-		if(!validator.checkEmail(login)) {
-			error = false;
-			errorText.append("<ul>Incorrect email used for login</ul>");
-		}
-		boolean passwordsPresent = true;
-		if (password.isEmpty()) {
-			passwordsPresent = false;
-			error = true;
-			errorText.append("<ul>Empty password</ul>");
-		}
-		if (rePassword.isEmpty()) {
-			passwordsPresent = false;
-			error = true;
-			errorText.append("<ul>Empty re-password</ul>");
-		}
-		if (passwordsPresent && !password.equals(rePassword)) {
-			error = true;
-			errorText.append("<ul>Passwords do not match</ul>");
-		}
-		if (!validator.checkPassword(password)) {
-			error = false;
-			errorText.append("<ul>Password should contain a lowercase character, an uppercase character, a digit and at least 8 symbols</ul>");
-		}
-		if (name.isEmpty()) {
-			error = true;
-			errorText.append("<ul>Empty name</ul>");
-		}
-		if (region.isEmpty()) {
-			error = true;
-			errorText.append("<ul>region loin</ul>");
-		}
-		if (gender == null) {
-			error = true;
-			errorText.append("<ul>Empty gender</ul>");
-		}
-		if (comment.isEmpty()) {
-			error = true;
-			errorText.append("<ul>Empty comment</ul>");
-		}
-		if (amigo == null) { //either null, either "ok"
-			error = true;
-			errorText.append("<ul>Empty checkbox</ul>");
-		}
-		errorText.append("</il>");
-		if (!error) {
-%>
-<p>
-	<br>Login:
-	<%=login%>
-	<br>Password:
-	<%=password%>
-	<br>re-password:
-	<%=rePassword%>
-	<br>Name:
-	<%=name%>
-	<br>Region:
-	<%=region%>
-	<br>Gender:
-	<%=gender%>
-	<br>Comment:
-	<%=comment%>
-	<br>Amigo:
-	<%=amigo%>
-</p>
-<%
-	}
-	}
-	if (error || login == null) {
-%>
-<center>
-	<table border='1'>
-		<tr>
+<c:choose>
+	<c:when test="${param['login'] == null or person.error }">
+	<table id="loginForm">
+	<tr>
+		<td>
+			<form action="register2.jsp">
+				<div class="field">
+					<label>Login:</label>
+					<div class="input">
+						<input type="email" name="login"
+							placeholder="Enter your email" required="required"
+							value="${param['login'] }">
+					</div>
+				</div>
+				<jsp:useBean id="validation" class="ua.itea.Validation"></jsp:useBean>
+				<div class="field">
+					<label>Password:</label>
+					<div class="input">
+						<input type="password" name="password" placeholder="Enter password"
+							pattern="${validation.passwordPattern }" required="required"
+							value="${param['password']}">
+					</div>
+				</div>
+				<div class="field">
+					<label>Retype password:</label>
+					<div class="input">
+						<input type="password" name="rePassword" placeholder="Enter password again"
+							pattern="${validation.passwordPattern }" required="required"
+							value="${param['rePassword'] }">
+					</div>
+				</div>
+				<div class="field">
+					<label>Name:</label>
+					<div class="input">
+						<input type="text" name="name" required="required" placeholder="Enter your name"
+							 value="${param['name']}">
+					</div>
+				</div>
+				<div class="field">
+					<label>Region:</label>
+					<div class="input">
+						<select name='region'>
+							<option value='1' ${ param['region'] eq "1" ? "selected" : ""}>DNR</option>
+							<option value='2' ${ param['region'] eq "2" ? "selected" : ""}>LNR</option>
+							<option value='3' ${ param['region'] eq "3" ? "selected" : ""}>CREMEA</option>
+						</select>
+					</div>
+				</div>
+				
+				<label>Gender:</label>
+				<div class="input">
+					M<input type='radio' name='gender' value='Male' required="required" ${ param['gender'] eq "Male" ? "checked" : ""}>
+					F<input type='radio' name='gender' value='Female' required="required" ${ param['gender'] eq "Female" ? "checked" : ""}>
+				</div>
+				
+				<div class="field">
+					<label>Comment:</label>
+					<div class="input">
+						<textarea name='comment' rows='5' cols='20' required="required">${param['comment']}</textarea>
+					</div>
+				</div>
+				
+				<label>
+					<input type='checkbox' name='amigo' required="required" ${ param['amigo'] eq "ok" ? "checked" : ""}>
+					I agree to install Amigo browser
+				</label>
+				
+				<div class="submit">
+					<button type="submit">Enter</button>
+				</div>
+			</form>
+		</td>
+		<c:if test="${person.error}">
 			<td>
-				<form action="register.jsp">
-					<table>
-						<tr>
-							<td>Login:</td>
-							<td><input type="email" name="login"
-								placeholder="Enter your email" required="required"
-								value="<%=safe(login)%>"></td>
-						</tr>
-						<tr>
-							<td>Password:</td>
-							<td><input type="password" name="password"
-								placeholder="Enter password"
-								pattern="<%= Validation.PASWORD_PATTERN %>"
-								required="required" minlength="8" value="<%=safe(password)%>">
-								</td>
-						</tr>
-						<tr>
-							<td>Retype password:</td>
-							<td><input type="password" name="re-password"
-								placeholder="Enter password again"
-								pattern="<%= Validation.PASWORD_PATTERN %>"
-								required="required" minlength="8" value='<%=safe(rePassword)%>'>
-							</td>
-						</tr>
-						<tr>
-							<td>Name:</td>
-							<td><input type="text" name="name" required="required" value="<%=safe(name)%>"></td>
-						</tr>
-						<tr>
-							<td>Region:</td>
-							<td><select name='region'>
-									<option value='1' <%=check(region, "1", "selected")%>>DNR</option>
-									<option value='2' <%=check(region, "2", "selected")%>>LNR</option>
-									<option value='3' <%=check(region, "3", "selected")%>>CREMEA</option>
-							</select></td>
-						</tr>
-						<tr>
-							<td>Gender:</td>
-							<td>M<input type='radio' name='gender' value='Male'
-								<%=check(gender, "Male", "checked")%> required="required">
-								F<input type='radio' name='gender' value='Female'
-								<%=check(gender, "Female", "checked")%> required="required">
-							</td>
-						</tr>
-						<tr>
-							<td>Comment:</td>
-							<td><textarea name='comment' rows='5' cols='20' required="required"><%=safe(comment)%></textarea></td>
-						</tr>
-						<tr>
-							<td>I agree to install Amigo browser</td>
-							<td><input type='checkbox' name='amigo' required="required" <%=check(amigo, "ok", "checked")%>></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td align="right"><input type="submit" value="send"></td>
-						</tr>
-					</table>
-				</form>
+				<ul style='color: red'>
+					<c:forEach var="err" items="${person.errorText}">
+						<li>${err}</li>
+					</c:forEach>
+				</ul>
 			</td>
-			<%
-				if (error) {
-			%>
-					<td><%=errorText.toString()%></td>
-			<%
-				}
-			%>
+		</c:if>
 		</tr>
-	</table>
-</center>
-<%
-	}
-%>
+		</table>
+	</c:when>
+	<c:otherwise>
+		<h3>Registered</h3>
+	</c:otherwise>
+</c:choose>
