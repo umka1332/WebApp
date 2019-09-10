@@ -92,5 +92,6 @@
 	</c:when>
 	<c:otherwise>
 		<h3>Registered</h3>
+		<c:out value="${ person }"></c:out>
 	</c:otherwise>
 </c:choose>

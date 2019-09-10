@@ -13,6 +13,7 @@ public class Person implements Serializable {
 	private String gender;
 	private String comment;
 	private String amigo;
+
 	private boolean error;
 	private List<String> errorText;
 
@@ -162,5 +163,12 @@ public class Person implements Serializable {
 			}
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "Person [login=" + login + ", password=" + password + ", rePassword=" + rePassword + ", name=" + name
+				+ ", region=" + region + ", gender=" + gender + ", comment=" + comment + ", amigo=" + amigo + "]";
+	}
+
 
 }
