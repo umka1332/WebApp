@@ -69,7 +69,7 @@
 				</div>
 				
 				<label>
-					<input type='checkbox' name='amigo' required="required" ${ param['amigo'] eq "ok" ? "checked" : ""}>
+					<input type='checkbox' name='amigo' required="required" ${ param['amigo'] != null ? "checked" : ""}>
 					I agree to install Amigo browser
 				</label>
 				
