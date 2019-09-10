@@ -11,7 +11,7 @@
 	<table id="loginForm">
 	<tr>
 		<td>
-			<form action="register2.jsp">
+			<form>
 				<div class="field">
 					<label>Login:</label>
 					<div class="input">
