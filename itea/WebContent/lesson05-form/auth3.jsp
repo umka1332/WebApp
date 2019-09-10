@@ -5,7 +5,7 @@
 		<c:if test="${ param['login'] != null }">
 			<h3>ACCESS DENIED</h3>
 		</c:if>
-		<form id="loginForm" action="auth2.jsp" method="get">
+		<form id="loginForm" method="get">
 
 			<div class="field">
 				<label>Enter your login:</label>
