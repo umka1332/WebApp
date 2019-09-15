@@ -28,10 +28,6 @@ public class AuthBean {
 	}
 
 	private boolean getAccess(String login, String password) {
-		//  оннект к базе, ЅлаЅлаЅлаЅла
-		if (login.equals("admin") && password.equals("123")) {
-			return true;
-		}
-		return false;
+		return new AuthDB().getLogin(login, password);
 	}
 }

@@ -1,23 +1,42 @@
 package ua.itea;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Person implements Serializable {
-	private String login;
-	private String password;
-	private String rePassword;
+	private String login; // varchar 50
+	private String password; // varchar 100
+	private String rePassword;// no db field
 	private String name;
 	private String region;
 	private String gender;
 	private String comment;
-	private String amigo;
+	private String amigo;// No db field
 
 	private boolean error;
 	private List<String> errorText;
 
+	private static final String DB_URL = "jdbc:mysql://localhost/iteashop" + "?user=root&password=";
+	private static final String CHECK_LOGIN = "SELECT * FROM users WHERE login = ?";
+	private static final String ADD_USER = "INSERT INTO users (login, password, name, region, gender, comment)"
+			+ " VALUES(?, ?, ?, ?, ?, ?)";
+
 	public Person() {
+	}
+
+	static {
+		try {
+			System.out.print("Loading driver... ");
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			System.out.println("Success");
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	public String getLogin() {
@@ -101,13 +120,19 @@ public class Person implements Serializable {
 		validate();
 		return errorText;
 	}
-	
+
 	private void invalidate() {
 		errorText = null;
 	}
-	
+
+	private void addError(String s) {
+		error = true;
+		errorText.add(s);
+	}
+
 	private void validate() {
 		if (errorText == null) {
+
 			errorText = new ArrayList<String>();
 			error = false;
 
@@ -115,60 +140,76 @@ public class Person implements Serializable {
 			boolean passwordsPresent = true;
 
 			if (login == null || login.isEmpty()) {
-				error = true;
-				errorText.add("<ul>Empty login</ul>");
+				addError("Empty login");
 			}
 			if (!validator.checkEmail(login)) {
-				error = false;
-				errorText.add("<ul>Incorrect email used for login</ul>");
+				addError("Incorrect email used for login");
+			} else {
+				try (Connection conn = DriverManager.getConnection(DB_URL);
+						PreparedStatement ps = conn.prepareStatement(CHECK_LOGIN);) {
+					ps.setString(1, login);
+					if (ps.executeQuery().next()) {
+						addError("User with this login already exists");
+					}
+				} catch (SQLException e) {
+					addError("Problem with DB");
+				}
 			}
 			if (password.isEmpty()) {
 				passwordsPresent = false;
-				error = true;
-				errorText.add("<Empty password");
+				addError("Empty password");
 			}
 			if (rePassword.isEmpty()) {
 				passwordsPresent = false;
-				error = true;
-				errorText.add("Empty re-password");
+				addError("Empty re-password");
 			}
 			if (passwordsPresent && !password.equals(rePassword)) {
-				error = true;
-				errorText.add("Passwords do not match");
+				addError("Passwords do not match");
 			}
 			if (!validator.checkPassword(password)) {
-				error = false;
-				errorText.add(
+				addError(
 						"Password should contain a lowercase character, an uppercase character, a digit and at least 8 symbols");
 			}
 			if (name.isEmpty()) {
-				error = true;
-				errorText.add("Empty name");
+				addError("Empty name");
 			}
 			if (region.isEmpty()) {
-				error = true;
-				errorText.add("region loin");
+				addError("region loin");
 			}
 			if (gender == null) {
-				error = true;
-				errorText.add("Empty gender");
+				addError("Empty gender");
 			}
 			if (comment.isEmpty()) {
-				error = true;
-				errorText.add("Empty comment");
+				addError("Empty comment");
 			}
 			if (amigo == null) { // either null, either "ok"
-				error = true;
-				errorText.add("Empty checkbox");
+				addError("Empty checkbox");
+			}
+
+			if (!error) {
+				try (Connection conn = DriverManager.getConnection(DB_URL);
+						PreparedStatement ps = conn.prepareStatement(ADD_USER)) {
+					ps.setString(1, login);
+					ps.setString(2, password);
+					ps.setString(3, name);
+					ps.setString(4, region);//Currently we have a number from selector rather than actual region
+					ps.setBoolean(5, gender.equals("Male"));
+					ps.setString(6, comment);
+					ps.execute();
+				} catch (SQLException ex) {
+					System.out.println("SQLException: " + ex.getMessage());
+					System.out.println("SQLState: " + ex.getSQLState());
+					System.out.println("VendorError: " + ex.getErrorCode());
+					addError("Can not write user to DB");
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Person [login=" + login + ", password=" + password + ", rePassword=" + rePassword + ", name=" + name
 				+ ", region=" + region + ", gender=" + gender + ", comment=" + comment + ", amigo=" + amigo + "]";
 	}
-
 
 }
