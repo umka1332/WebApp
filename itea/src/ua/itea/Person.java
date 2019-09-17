@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.Hash;
+
 public class Person implements Serializable {
 	private String login; // varchar 50
 	private String password; // varchar 100
@@ -190,7 +192,7 @@ public class Person implements Serializable {
 				try (Connection conn = DriverManager.getConnection(DB_URL);
 						PreparedStatement ps = conn.prepareStatement(ADD_USER)) {
 					ps.setString(1, login);
-					ps.setString(2, password);
+					ps.setString(2, Hash.hash(password));
 					ps.setString(3, name);
 					ps.setString(4, region);//Currently we have a number from selector rather than actual region
 					ps.setBoolean(5, gender.equals("Male"));

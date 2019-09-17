@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import utils.Hash;
+
 public class AuthDB extends Auth {
 	private final static String SELECT_SOME_QUERY = "select * from users WHERE login = ? and password = ?"; //UNSAFE
 	
@@ -22,10 +24,10 @@ public class AuthDB extends Auth {
 	public boolean getLogin(String login, String password) {
 		System.out.print("Obtaining connection... ");
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/iteashop?" + "user=root&password=")) {
-			System.out.println("OK");			
+			System.out.println("OK");
 			try (PreparedStatement prepStmt = conn.prepareStatement(SELECT_SOME_QUERY)) {
 				prepStmt.setString(1, login);
-				prepStmt.setString(2, password);
+				prepStmt.setString(2, Hash.hash(password));
 				return prepStmt.executeQuery().next();
 			} catch (SQLException ex) {
 				// handle any errors
