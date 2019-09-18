@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="itea">
+    <wb-module deploy-name="Proj2">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/lib"/>
         <dependent-module archiveName="Validation.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/Validation/Validation">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="itea"/>
-        <property name="java-output-path" value="/itea/build/classes"/>
+        <property name="java-output-path" value="/Proj2/build/classes"/>
+        <property name="context-root" value="Proj2"/>
     </wb-module>
 </project-modules>
