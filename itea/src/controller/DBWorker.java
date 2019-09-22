@@ -92,7 +92,7 @@ public class DBWorker {
 		}
 		try {
 			stmt = conn.createStatement();
-			boolean result = stmt.execute(SOME_INSERT);
+			stmt.execute(SOME_INSERT);
 		} catch (SQLException ex) {
 			// handle any errors
 			System.out.println("SQLException: " + ex.getMessage());

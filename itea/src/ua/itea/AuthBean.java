@@ -3,7 +3,6 @@ package ua.itea;
 public class AuthBean {
 	private String login;
 	private String password;
-	private boolean accessGranted;
 	
 	public AuthBean() {}
 
