@@ -21,11 +21,11 @@ out.println(res);
 if (login != null && password != null) {
     if (login.equals("admin") && password.equals("123")) {
     %>
-        <h3 style="color:green">Success!<h3/>
+        <h3 style="color:green">Success!</h3>
     <%
     } else {
     %>
-        "<h3 style="color:red">Denied!<h3/>"
+        "<h3 style="color:red">Denied!</h3>"
     <%
     }
 }
