@@ -40,24 +40,23 @@ public class AuthServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 		HttpSession session = req.getSession();
 		String loginAttribute = (String)session.getAttribute("Login");
-		out.write("Hello " + loginAttribute
-				+ "<br />"
-				+ "<form action='logout'>"
-				+ "<input type='submit' value='ok' />"
-				+ "</form>");
+		out.write("Hello " + loginAttribute +
+				"<form action='' method='post'>" + 
+				"<input type='hidden' value='ok' name='logout'>" + 
+				"<input type='submit' value='ok'>" + 
+				"</form>");
 	}
+	
 	public void logout(HttpServletRequest req, HttpServletResponse resp) {
 		HttpSession session = req.getSession();
 		session.invalidate();
 		session = req.getSession(true);
 		
 	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//super.doGet(req, resp);
 		PrintWriter out = resp.getWriter();
-		
 		HttpSession session = req.getSession();
 		String loginAttribute = (String)session.getAttribute("Login");
 		if (loginAttribute == null) {
