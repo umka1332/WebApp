@@ -1,6 +1,7 @@
 package ua.itea.models;
 
-public class Person {
+public class User {
+	private long id;
 	private String login;
 	private String password;
 	private String name;
@@ -8,7 +9,15 @@ public class Person {
 	private String gender;
 	private String comment;
 	
-	public Person () {}
+	public User () {}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getLogin() {
 		return login;

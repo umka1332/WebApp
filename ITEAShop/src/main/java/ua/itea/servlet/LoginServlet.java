@@ -30,11 +30,12 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String logout = request.getParameter("logout");
 		HttpSession session = request.getSession(); 
-		if (logout!=null) {
+		Object principal = session.getAttribute("principal");
+		if (logout != null && principal != null) {
 			session.invalidate();
 			session = request.getSession(true);
+			principal = null;
 		}
-		Object principal = session.getAttribute("principal");
 		if (principal == null) {
 			String login = request.getParameter("login");
 			String password = request.getParameter("password");

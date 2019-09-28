@@ -4,6 +4,35 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<filter-name>MyFilter</filter-name>
+  	<display-name>MyFilter</display-name>
+  	<description></description>
+  	<filter-class>ua.itea.filters.MyFilter</filter-class>
+  	<init-param>
+  		<param-name>itea</param-name>
+  		<param-value>minimax</param-value>
+  	</init-param>
+  </filter>
+  <filter>
+  	<filter-name>DiscountFilter</filter-name>
+  	<display-name>DiscountFilter</display-name>
+  	<description></description>
+  	<filter-class>ua.itea.filters.DiscountFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>DiscountFilter</filter-name>
+  	<servlet-name>DiscountServlet</servlet-name>
+  </filter-mapping>
+  
+  <filter-mapping>
+  	<filter-name>MyFilter</filter-name>
+  	<servlet-name>LoginServlet</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>DiscountFilter</filter-name>
+  	<url-pattern>/DiscountFilter</url-pattern>
+  </filter-mapping>
   <servlet>
   	<servlet-name>LoginServlet</servlet-name>
   	<display-name>LoginServlet</display-name>
@@ -16,13 +45,43 @@
   	<description></description>
   	<servlet-class>ua.itea.servlet.RegisterServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>DiscountServlet</servlet-name>
+  	<display-name>DiscountServlet</display-name>
+  	<description></description>
+  	<servlet-class>ua.itea.servlet.DiscountServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>CartServlet</servlet-name>
+  	<display-name>CartServlet</display-name>
+  	<description></description>
+  	<servlet-class>ua.itea.servlet.CartServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ProductServlet</servlet-name>
+  	<display-name>ProductServlet</display-name>
+  	<description></description>
+  	<servlet-class>ua.itea.servlet.ProductServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>LoginServlet</servlet-name>
-  	<url-pattern>/LoginServlet</url-pattern>
+  	<url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
-  	<url-pattern>/RegisterServlet</url-pattern>
+  	<url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DiscountServlet</servlet-name>
+  	<url-pattern>/discount</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CartServlet</servlet-name>
+  	<url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ProductServlet</servlet-name>
+  	<url-pattern>/products</url-pattern>
   </servlet-mapping>
   
 </web-app>

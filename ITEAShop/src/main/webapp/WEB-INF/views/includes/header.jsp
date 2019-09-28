@@ -10,9 +10,9 @@
 <center>
 	<table>
 		<tr>
-			<td width='100px' align='center'><a href='auth.jsp'>LOGIN</a>
+			<td width='100px' align='center'><a href='login'>LOGIN</a>
 			</td>
-			<td width='100px' align='center'><a href='register.jsp'>REGISTER</a>
+			<td width='100px' align='center'><a href='register'>REGISTER</a>
 			</td>
 		</tr>
 	</table>

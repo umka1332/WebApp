@@ -1,5 +1,5 @@
 <!--Author: Oleksandr Naumov-->
-<%@include file="includes/header.jsp" %>
+<%@ include file='/WEB-INF/includes/header.jsp'%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <jsp:useBean id="counter" class="ua.itea.models.TryCounter" scope="session" />
@@ -14,14 +14,14 @@
 </c:when>
 <c:otherwise>
 	<jsp:setProperty property="failTime" name="counter" value='0' />
-	<c:if test="${param.login != null and param.password != null }">
+	<c:if test="${param.login != null and param.password != null or principal != null}">
 		<jsp:setProperty property="showMessage" name="counter" value='true' />
 		<c:choose>
 			<c:when test="${counter.tryCounter <=3 and principal != null }">
 				<jsp:setProperty property="message" name="counter"
 					value="<h1 style='color:green;'>ACCESS GRANTED</h1><br/>
 						Hello ${principal.name}!<br/>
-						<form>
+						<form method='post'>
 							<input type='hidden' value='ok' name='logout' />
 							<input type='submit' value='logout' />
 						</form>" />
@@ -70,5 +70,4 @@
 
 </form>
 </c:if>
-</body>
-</html>
+<%@ include file='/WEB-INF/includes/footer.jsp'%>
