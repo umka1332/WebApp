@@ -25,6 +25,7 @@
 								value="${ param['login'] }">
 						</div>
 					</div>
+					
 					<jsp:useBean id="validation" class="ua.itea.utils.Validation"></jsp:useBean>
 					<div class="field">
 						<label>Password:</label>
@@ -34,6 +35,7 @@
 								value="${ param['password']}">
 						</div>
 					</div>
+					
 					<div class="field">
 						<label>Retype password:</label>
 						<div class="input">
@@ -43,6 +45,7 @@
 						</div>
 					</div>
 				</c:if>
+				
 				<div class="field">
 					<label>Name:</label>
 					<div class="input">
@@ -50,6 +53,7 @@
 							 value="${ param['name'] != null ? param['name'] : principal['name'] }">
 					</div>
 				</div>
+				
 				<div class="field">
 					<label>Region:</label>
 					<div class="input">
@@ -72,9 +76,12 @@
 				<div class="field">
 					<label>Comment:</label>
 					<div class="input">
-						<textarea name='comment' rows='5' cols='20' required="required">${ param['comment'] != null ? param['comment'] : principal['comment'] }</textarea>
+						<textarea name='comment' rows='5' cols='33' required="required">
+							${ param['comment'] != null ? param['comment'] : principal['comment'] }
+						</textarea>
 					</div>
 				</div>
+				
 				<c:if test="${ principal == null }">
 					<label>
 						<input type='checkbox' name='amigo' required="required" ${ param['amigo'] != null ? "checked" : "" }>
