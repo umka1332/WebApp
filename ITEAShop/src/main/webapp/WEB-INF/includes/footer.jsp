@@ -31,7 +31,7 @@
 	</div>
 </div>
 <div id="footer">
-	<p>Copyright (c) by Бондаренко Антон</p>
+	<p>Copyright (c) by Наумов Олександр</p>
 </div>
 <!-- end #footer -->
 </body>

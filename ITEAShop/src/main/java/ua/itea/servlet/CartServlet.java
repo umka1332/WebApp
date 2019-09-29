@@ -64,6 +64,6 @@ public class CartServlet extends HttpServlet {
 			}
 		}
 		//TODO: maybe pass category or return link as an argument
-		response.sendRedirect("./products");
+		response.sendRedirect(request.getParameter("returnLink"));
 	}
 }

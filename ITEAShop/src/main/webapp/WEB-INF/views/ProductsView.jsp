@@ -16,6 +16,7 @@
 			<td>
 				<form action="./cart" method="post">
 					<input type='hidden' value='${ product.id }' name='productToBuy' />
+					<input type='hidden' value='${ returnLink }' name='returnLink' />
 					<input type='submit' value='buy' />
 				</form>
 			</td>

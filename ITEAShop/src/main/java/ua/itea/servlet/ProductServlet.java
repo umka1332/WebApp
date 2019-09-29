@@ -32,12 +32,19 @@ public class ProductServlet extends HttpServlet {
 		String cateoryParam = request.getParameter("category");
 		List<Product> productList = null;
 		ProductDAO productDAO = DAOFactory.getDAOFactory(1).getProductDAO();
+		String returnLink = "./products";
 		if (cateoryParam == null) {
 			productList  = productDAO.getProductList();
 		} else {
-			long cateory = Long.parseLong(cateoryParam);
-			productList = productDAO.getProductListByCategory(cateory);
+			try {
+				long category = Long.parseLong(cateoryParam);
+				productList = productDAO.getProductListByCategory(category);
+				returnLink+="?category="+category;
+			} catch (NumberFormatException ex) {
+				System.out.println("Wrong category passed in request to ProductServlet");
+			}
 		}
+		request.setAttribute("returnLink", returnLink);
 		request.setAttribute("productList", productList);
 		request.getRequestDispatcher("WEB-INF/views/ProductsView.jsp").forward(request, response);
 	}
