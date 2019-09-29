@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
@@ -27,15 +28,35 @@ Released   : 20110926
 <div id="header" class="container">
 	<div id="logo">
 		<h1><a href="#">Мой магазин </a></h1>
-		<p>freecsstemplates<a href="http://www.freecsstemplates.org"></a></p>
+		<!-- <p>freecsstemplates<a href="http://www.freecsstemplates.org"></a></p> -->
 	</div>
 	<div id="menu">
 		<ul>
-			<li class="current_page_item"><a href="./products">Главная</a></li>
-			<li><a href="./products">Товары</a></li>
-			<li><a href="./register">Регистрация</a></li>
-			<li><a href="./login">Вход</a></li>
-			<li><a href="./cart">Корзина</a></li>
+			<li 
+			<c:if test="${requestScope['javax.servlet.forward.request_uri'].endsWith('/main')}">
+				class="current_page_item"
+			</c:if>
+			><a href="./main">Главная</a></li>
+			<li 
+			<c:if test="${requestScope['javax.servlet.forward.request_uri'].endsWith('/products')}">
+				class="current_page_item"
+			</c:if>
+			><a href="./products">Товары</a></li>
+			<li 
+			<c:if test="${requestScope['javax.servlet.forward.request_uri'].endsWith('/register')}">
+				class="current_page_item"
+			</c:if>
+			><a href="./register">Регистрация</a></li>
+			<li 
+			<c:if test="${requestScope['javax.servlet.forward.request_uri'].endsWith('/login')}">
+				class="current_page_item"
+			</c:if>
+			><a href="./login">Вход</a></li>
+			<li 
+			<c:if test="${requestScope['javax.servlet.forward.request_uri'].endsWith('/cart')}">
+				class="current_page_item"
+			</c:if>
+			><a href="./cart">Корзина</a></li>
 		</ul>
 	</div>
 </div>

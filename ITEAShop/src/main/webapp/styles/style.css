@@ -206,6 +206,7 @@ a:hover {
 }
 
 #menu .current_page_item a {
+	color: #FF0000;
 }
 
 /* Background */
