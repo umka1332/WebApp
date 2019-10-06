@@ -39,6 +39,7 @@ public class CartServlet extends HttpServlet {
 			productList = cart.getProductList();
 		}
 		request.setAttribute("productList", productList);
+		request.setAttribute("returnLink", "./cart");
 		//TODO: it also should know how to remove from cart
 		request.getRequestDispatcher("WEB-INF/views//ProductsView.jsp").forward(request, response);
 	}
