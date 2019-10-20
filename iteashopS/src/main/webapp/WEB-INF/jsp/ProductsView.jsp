@@ -35,15 +35,15 @@ function buy(id) {
 			});
 }
 function rem(id) {
-	var amount = document.getElementById("amount"+id).innerHTML;
-	$.post('./cart',
-			{ productToRem: id, delete: 'delete' },
-			function(data, status){
-				//alert("status: "+status+"\ndata: "+data);
-				if(data == "Ok") {
-					document.getElementById("totalAmount").innerHTML--;
-					document.getElementById("amount"+id).innerHTML--;
-				}
+	$.ajax({ url: './cart/'+id,
+			 type: 'DELETE',
+			 success: function(result){
+				 //alert(result);
+				 if(result=="Ok") {
+					 document.getElementById("totalAmount").innerHTML--;
+					 document.getElementById("amount"+id).innerHTML--;
+					 }
+				 }
 			});	
 }
 </script>

@@ -6,8 +6,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,21 +55,25 @@ public class CartServlet {
 		}
 		return "Error";
 	} 
-	@RequestMapping(method = RequestMethod.POST, params = { "productToRem", "delete" })
-	@ResponseBody
-	protected String doDelete(HttpSession session, Long productToRem) {
-		System.out.println("Delete Product" + productToRem);
+	@DeleteMapping("/{productToRem}")
+	protected ResponseEntity<?> doDelete(HttpSession session, @PathVariable Long productToRem) {
+		System.out.println("Delete Product by DELETE method" + productToRem);
 		DAOFactory factory = DAOFactory.getDAOFactory(1);
 		ProductDAO productDAO = factory.getProductDAO();
 		Product product = productDAO.getProductById(productToRem);
+		HttpStatus httpStatus = HttpStatus.NOT_MODIFIED;
+		String response ="Error";
 		if (product != null) {
 			Cart cart = (Cart) session.getAttribute("cart");
 			if (cart != null) {
 				boolean res = cart.subProduct(product);
 				session.setAttribute("cart", cart);
-				if (res) return "Ok";
+				if (res) {
+					httpStatus = HttpStatus.OK;
+					response = "Ok";
+				}
 			}
 		}
-		return "Error";
+		return new ResponseEntity<String>(response, httpStatus);
 	}
 }
