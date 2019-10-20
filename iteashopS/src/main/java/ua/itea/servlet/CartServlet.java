@@ -25,10 +25,8 @@ public class CartServlet {
 	@GetMapping
 	protected String doGet(HttpSession session, ModelMap mapping) {
 		Cart cart = (Cart) session.getAttribute("cart");
-		Map<Product,Integer> productMap = null;
 		if (cart != null)
-			productMap = cart.getProductMap();
-		mapping.addAttribute("productMap", productMap);
+			mapping.addAttribute("productMap", cart.getProductMap());
 		return "CartView";
 	}
 
