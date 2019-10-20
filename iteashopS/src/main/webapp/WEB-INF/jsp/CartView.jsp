@@ -3,23 +3,8 @@
 
 <table>
 	<c:forEach var='entry' items='${productMap}'>
-	<c:set var='id' value='${entry.key.id}' />
-		<tr>
-			<td width="200">${entry.key.name}</td>
-			<td width="400"></td>
-		</tr>
-		<tr>
-			<td><img src="<c:url value="/resources/productimages/${id}.jpg"/>" height="200"></td>
-			<td>${entry.key.description}</td>
-		</tr>
-		<tr>
-			<td>Price: ${entry.key.price} UAH</td>
-			<td>
-				<input type='button' value='+' name='Button${id}' id='Button${id}' onclick='buy(${id})'/>
-				<span id='amount${id}'>${entry.value}</span>
-				<input type='button' value='-' name='btn${id}' id='btn${id}' onclick='rem(${id})'/>
-			</td>
-		</tr>
+	<c:set var='product' value='${entry.key}' />
+	<%@ include file='/WEB-INF/includes/ShowProduct.jsp'%>
 	</c:forEach>
 </table>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>

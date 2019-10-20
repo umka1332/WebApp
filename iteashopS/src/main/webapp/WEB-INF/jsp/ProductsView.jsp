@@ -3,22 +3,7 @@
 
 <table>
 	<c:forEach var='product' items='${productList}'>
-		<tr>
-			<td width="200">${product.name}</td>
-			<td width="400"></td>
-		</tr>
-		<tr>
-			<td><img src="<c:url value="/resources/productimages/${product.id}.jpg"/>" height="200"></td>
-			<td>${product.description}</td>
-		</tr>
-		<tr>
-			<td>Price: ${product.price} UAH</td>
-			<td>
-				<input type='button' value='+' name='Button${product.id}' id='Button${product.id}' onclick='buy(${product.id})'/>
-				<span id='amount${product.id}'>${cart.productMap[product] == null ? 0 : cart.productMap[product] }</span>
-				<input type='button' value='-' name='btn${product.id}' id='btn${product.id}' onclick='rem(${product.id})'/>
-			</td>
-		</tr>
+	<%@ include file='/WEB-INF/includes/ShowProduct.jsp'%>
 	</c:forEach>
 </table>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
