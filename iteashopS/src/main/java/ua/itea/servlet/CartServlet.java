@@ -2,14 +2,15 @@ package ua.itea.servlet;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import ua.itea.dao.DAOFactory;
@@ -24,18 +25,21 @@ public class CartServlet {
 	protected String doGet(HttpSession session, ModelMap mapping) {
 		Cart cart = (Cart) session.getAttribute("cart");
 		List<Product> productList = Collections.emptyList();
+		Map<Product,Integer> productMap = null;
 		if (cart != null) {
 			productList = cart.getProductList();
+			productMap = cart.getProductMap();
 		}
 		mapping.addAttribute("productList", productList);
+		mapping.addAttribute("productMap", productMap);
 		mapping.addAttribute("returnLink", "./cart");
-		return "ProductsView";
+		return "CartView";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy", "returnLink" })
 	protected RedirectView doPost(HttpSession session, long productToBuy, String returnLink) {
 		System.out.print("No ");
-		doPost(session, productToBuy);
+		addProduct(session, productToBuy);
 		RedirectView rv = new RedirectView();
 		rv.setContextRelative(true);
 		rv.setUrl(returnLink);
@@ -43,7 +47,8 @@ public class CartServlet {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy"})
-	protected String doPost(HttpSession session, long productToBuy) {
+	@ResponseBody
+	protected String addProduct(HttpSession session, long productToBuy) {
 		System.out.println("JQ request");
 		DAOFactory factory = DAOFactory.getDAOFactory(1);
 		ProductDAO productDAO = factory.getProductDAO();
@@ -53,9 +58,10 @@ public class CartServlet {
 			if (cart == null) cart = new Cart();
 			cart.addProduct(product);
 			session.setAttribute("cart", cart);
+			return "Ok";
 		}
-		return "./cart";
-	}
+		return "Error";
+	} 
 	
 	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy", "returnLink", "delete" })
 	protected RedirectView doDelete(HttpSession session, long productToBuy, String returnLink) {
@@ -66,17 +72,21 @@ public class CartServlet {
 		return rv;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy", "delete" })
-	protected void doDelete(HttpSession session, long productToRem) {
+	@RequestMapping(method = RequestMethod.POST, params = { "productToRem", "delete" })
+	@ResponseBody
+	protected String doDelete(HttpSession session, Long productToRem) {
+		System.out.println("Delete Product" + productToRem);
 		DAOFactory factory = DAOFactory.getDAOFactory(1);
 		ProductDAO productDAO = factory.getProductDAO();
 		Product product = productDAO.getProductById(productToRem);
 		if (product != null) {
 			Cart cart = (Cart) session.getAttribute("cart");
 			if (cart != null) {
-				cart.subProduct(product);
+				boolean res = cart.subProduct(product);
 				session.setAttribute("cart", cart);
+				if (res) return "Ok";
 			}
 		}
+		return "Error";
 	}
 }

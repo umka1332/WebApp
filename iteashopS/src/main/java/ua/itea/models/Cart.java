@@ -8,6 +8,10 @@ import java.util.Map;
 public class Cart {
 	private Map<Product,Integer> productMap = new HashMap<Product, Integer>();
 	
+	public Map<Product, Integer> getProductMap() {
+		return productMap;
+	}
+
 	public List<Product> getProductList() {
 		List<Product> res = new ArrayList<Product>();
 		for(Map.Entry<Product, Integer> productPair : productMap.entrySet()) {
@@ -37,7 +41,7 @@ public class Cart {
 		productMap.put(product, productMap.getOrDefault(product, 0) + amount);
 	}
 	
-	public void subProduct(Product product) {
+	public boolean subProduct(Product product) {
 		if (productMap.containsKey(product)) {
 			int newCount = productMap.get(product)-1;
 			if (newCount <= 0) {
@@ -45,6 +49,8 @@ public class Cart {
 			} else {
 				productMap.put(product, newCount);
 			}
+			return true;
 		}
+		return false;
 	}
 }

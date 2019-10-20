@@ -11,7 +11,7 @@
                     <c:if test='${ principal!=null }'>
                     Вы авторизировались как ${ principal.name }<br />
                     </c:if>
-                    В вашей корзине ${cart!=null ? cart.productCount : 0 } товаров.
+                    Товаров в Вашей корзине: <span id='totalAmount'>${cart!=null ? cart.productCount : 0 }</span>.
                     </font>
                     </td>
                     </tr>

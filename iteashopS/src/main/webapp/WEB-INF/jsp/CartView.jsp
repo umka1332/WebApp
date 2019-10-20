@@ -2,21 +2,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <table>
-	<c:forEach var='product' items='${productList}'>
+	<c:forEach var='entry' items='${productMap}'>
 		<tr>
-			<td width="200">${product.name}</td>
+			<td width="200">${entry.key.name}</td>
 			<td width="400"></td>
 		</tr>
 		<tr>
-			<td><img src="<c:url value="/resources/productimages/${product.id}.jpg"/>" height="200"></td>
-			<td>${product.description}</td>
+			<td><img src="<c:url value="/resources/productimages/${entry.key.id}.jpg"/>" height="200"></td>
+			<td>${entry.key.description}</td>
 		</tr>
 		<tr>
-			<td>Price: ${product.price} UAH</td>
+			<td>Price: ${entry.key.price} UAH</td>
 			<td>
-				<input type='button' value='+' name='Button${product.id}' id='Button${product.id}' onclick='buy(${product.id})'/>
-				<span id='amount${product.id}'>${cart.productMap[product] == null ? 0 : cart.productMap[product] }</span>
-				<input type='button' value='-' name='btn${product.id}' id='btn${product.id}' onclick='rem(${product.id})'/>
+				<input type='button' value='+' name='Button${entry.key.id}' id='Button${entry.key.id}' onclick='buy(${entry.key.id})'/>
+				<span id='amount${entry.key.id}'>${entry.value}</span>
+				<input type='button' value='-' name='btn${entry.key.id}' id='btn${entry.key.id}' onclick='rem(${entry.key.id})'/>
 			</td>
 		</tr>
 	</c:forEach>
