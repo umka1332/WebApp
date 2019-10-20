@@ -11,7 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
 import ua.itea.dao.DAOFactory;
 import ua.itea.dao.ProductDAO;
@@ -36,16 +35,6 @@ public class CartServlet {
 		return "CartView";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy", "returnLink" })
-	protected RedirectView doPost(HttpSession session, long productToBuy, String returnLink) {
-		System.out.print("No ");
-		addProduct(session, productToBuy);
-		RedirectView rv = new RedirectView();
-		rv.setContextRelative(true);
-		rv.setUrl(returnLink);
-		return rv;
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy"})
 	@ResponseBody
 	protected String addProduct(HttpSession session, long productToBuy) {
@@ -62,16 +51,6 @@ public class CartServlet {
 		}
 		return "Error";
 	} 
-	
-	@RequestMapping(method = RequestMethod.POST, params = { "productToBuy", "returnLink", "delete" })
-	protected RedirectView doDelete(HttpSession session, long productToBuy, String returnLink) {
-		doDelete(session, productToBuy);
-		RedirectView rv = new RedirectView();
-		rv.setContextRelative(true);
-		rv.setUrl(returnLink);
-		return rv;
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, params = { "productToRem", "delete" })
 	@ResponseBody
 	protected String doDelete(HttpSession session, Long productToRem) {
