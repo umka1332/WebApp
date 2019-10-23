@@ -50,7 +50,7 @@
 	<br /> Time Left:  00:<c:out value="${ (counter.failTime - date.time) div 1000 }"></c:out>
 </c:if>
 <c:if test="${counter.showForm }" >
-	<form id="loginForm" method="post">
+	<form id="loginForm" method="post" action="<c:url value='./login'/>">
 
 	<div class="field">
 		<label>Enter your login:</label>

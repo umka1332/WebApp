@@ -4,8 +4,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import ua.itea.controllers.RegisterController;
 import ua.itea.models.User;
@@ -13,40 +14,48 @@ import ua.itea.models.User;
 @Controller
 @RequestMapping("/register")
 public class RegisterServlet {
-	@RequestMapping(method = RequestMethod.GET)
+	private static final String JSP_NAME = "register";
+	
+	@GetMapping
 	protected String doGet() {
-		return "register";
+		return JSP_NAME;
 	}
 
-	@RequestMapping(method = RequestMethod.POST,
-			params = {"login", "password", "rePassword", "name", "gender", "region", "comment", "amigo"})
+	@PostMapping(params = { "name", "gender", "region", "comment" })
 	protected String doPost(HttpSession session, ModelMap mapping,
-			String login, String password, String rePassword, String name, String gender, String region, String comment, String amigo) {
-		User principal = (User)session.getAttribute("principal");
-		if (name != null) { //Suppose that presence of one parameter means that we want to perform some changes
-			User newPrincipal = null;
-			RegisterController controller = new RegisterController();
-			controller.setName(name);
-			controller.setGender(gender);
-			controller.setRegion(region);
-			controller.setComment(comment);
-			if (principal == null) { //Register user
-				controller.setLogin(login);
-				controller.setPassword(password);
-				controller.setRePassword(rePassword);
-				controller.setAmigo(amigo);
-				newPrincipal = controller.createUser();
-			} else { //Update user
-				controller.setLogin(login);
-				newPrincipal = controller.updateUser();
-			}
-			if (newPrincipal != null) { //There weren't any errors
-				session.setAttribute("principal", newPrincipal);
-			} else {
-				mapping.addAttribute("errorText", controller.getErrorText());
-			}
+			String name, String gender, String region, String comment) {
+		User principal = (User) session.getAttribute("principal");
+		if (principal == null) 
+			return "auth"; 
+		return doPost(session, mapping, null, null, null, name, gender, region, comment, null);
+	}
+
+	@PostMapping(params = { "login", "password", "rePassword", "name", "gender", "region", "comment", "amigo" })
+	protected String doPost(HttpSession session, ModelMap mapping, String login, String password, String rePassword,
+			String name, String gender, String region, String comment, String amigo) {
+		User principal = (User) session.getAttribute("principal");
+		User newPrincipal = null;
+		RegisterController controller = new RegisterController();
+		controller.setName(name);
+		controller.setGender(gender);
+		controller.setRegion(region);
+		controller.setComment(comment);
+		if (principal == null) { // Register user
+			controller.setLogin(login);
+			controller.setPassword(password);
+			controller.setRePassword(rePassword);
+			controller.setAmigo(amigo);
+			newPrincipal = controller.createUser();
+		} else { // Update user
+			controller.setLogin(principal.getLogin());
+			newPrincipal = controller.updateUser();
 		}
-		return "register";
+		if (newPrincipal != null) { // There weren't any errors
+			session.setAttribute("principal", newPrincipal);
+		} else {
+			mapping.addAttribute("errorText", controller.getErrorText());
+		}
+		return JSP_NAME;
 	}
 
 }
